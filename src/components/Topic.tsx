@@ -1,52 +1,42 @@
 import styled from "styled-components/macro";
-import { User } from "../types/User";
-import React from "react";
-import Rating from "./Rating";
+import React, {useState} from "react";
+import Rating, { RatingType } from "./Rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser, faComment } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import getFormatedDate from "../formatting/date";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
+import getFormattedDate from "../utils/date";
+import UserPhoto from "./UserPhoto";
+import Link from "./Link";
+import TopicType from "../types/Topic";
 
 export interface TopicProps {
-  id: number;
-  name: string;
-  description: string;
-  author: User;
-  date: Date;
-  rating: number;
-  commentsCount: number;
-  vote?: number;
+  topic: TopicType;
 }
 
-const Topic: React.FC<TopicProps> = ({
-  id,
-  name,
-  description,
-  author,
-  date,
-  rating,
-  commentsCount,
-  vote,
-}) => {
+const Topic: React.FC<TopicProps> = ({ topic }) => {
+  const [processing, setProcessing] = useState<boolean>(false);
+
   return (
     <StyledTopic>
-      <Rating rating={rating} vote={vote} />
+      <Rating
+        rating={topic.rating}
+        vote={topic.vote}
+        processing={processing}
+        onUpVote={() => console.log("up")}
+        onDownVote={() => console.log("down")}
+        onVoteReset={() => console.log("unset")}
+      />
       <div>
         <TopicName>
-          <TopicLink to={"/"}>{name}</TopicLink>
+          <TopicLink to={"/"}>{topic.name}</TopicLink>
         </TopicName>
-        <TopicDescription>{description}</TopicDescription>
+        <TopicDescription>{topic.description}</TopicDescription>
         <TopicFooter>
-          <TopicAuthorPhoto>
-            {author.avatar && <img src={author.avatar} alt={"author"} />}
-            {!author.avatar && <FontAwesomeIcon icon={faCircleUser} />}
-          </TopicAuthorPhoto>
+          <UserPhoto imgPath={topic.author.photoPath} />
           <TopicPostedBy>
-            Posted by{" "}
-            <TopicAuthorLink to={"/"}>{author.nickname}</TopicAuthorLink>{" "}
-            {getFormatedDate(date)}
+            Posted by <Link to={"/"}>{topic.author.nickname}</Link>{" "}
+            {getFormattedDate(topic.date)}
           </TopicPostedBy>
-          <TopicComments>{commentsCount}</TopicComments>
+          <TopicComments>{topic.commentsCount}</TopicComments>
         </TopicFooter>
       </div>
     </StyledTopic>
@@ -59,6 +49,7 @@ const StyledTopic = styled.article`
   display: flex;
   box-shadow: 0 15px 15px -3px rgba(143, 143, 143, 0.1);
   padding: 20px 40px;
+  margin-bottom: 40px;
 `;
 
 const TopicName = styled.h2`
@@ -67,7 +58,6 @@ const TopicName = styled.h2`
 `;
 
 const TopicLink = styled(Link)`
-  text-decoration: none;
   color: inherit;
 `;
 
@@ -76,45 +66,19 @@ const TopicDescription = styled.p`
   color: #8c8c8c;
   line-height: 1.5em;
   padding-bottom: 1em;
-  border-bottom: 1px #8c8c8c solid;
+  border-bottom: 1px solid #d9d9d9;
   margin: 1em 0;
 `;
 
 const TopicFooter = styled.div`
   display: flex;
   align-items: center;
-  font-size: 0.8em;
+  font-size: 0.8rem;
   color: #8c8c8c;
-`;
-
-const TopicAuthorPhoto = styled.div`
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  margin-right: 1em;
-
-  > img {
-    width: 100%;
-  }
-
-  > svg {
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 const TopicPostedBy = styled.div`
   margin-right: 1em;
-`;
-
-const TopicAuthorLink = styled(Link)`
-  color: #3d5af1;
-  text-decoration: none;
-  font-weight: bold;
-  margin-right: 0.5em;
 `;
 
 const TopicComments: React.FC = ({ children }) => {
@@ -138,4 +102,4 @@ const StyledTopicComments = styled.div`
   }
 `;
 
-export default Topic;
+export default React.memo(Topic);
