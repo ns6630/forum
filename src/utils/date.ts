@@ -1,4 +1,4 @@
-export default function getFormatedDate(date: Date) {
+export default function getFormattedDate(date: Date) {
   function addExtraZeroForNumber(value: number) {
     const result = String(value);
     return result.length === 1 ? "0" + result : result;
