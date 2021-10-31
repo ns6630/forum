@@ -1,58 +1,78 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
-import BlueArrowUpButton from "./BlueArrowUpButton";
-import ArrowDownButton from "./ArrowDownButton";
-import ArrowUpButton from "./ArrowUpButton";
-import RedArrowDownButton from "./RedArrowDownButton";
-import getPresentationRating from "../formatting/rating";
+import getPresentationRating from "../utils/rating";
+import IconButton from "./IconButton";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+export enum RatingType {
+  unset,
+  up,
+  down,
+}
 
 export interface RatingProps {
   rating: number;
-  vote?: number;
+  vote?: RatingType;
+  processing: boolean;
+  onUpVote: () => void;
+  onDownVote: () => void;
+  onVoteReset: () => void;
 }
 
-const Rating: React.FC<RatingProps> = ({ rating, vote }) => {
-  const [localRating, setLocalRating] = useState(rating);
-  const [localVote, setLocalVote] = useState(vote ?? 0);
-  const [processing, setProcessing] = useState(false);
-
-  function onUp() {
-    setProcessing(true);
-    setLocalVote((value) => value + 1);
-    setLocalRating((value) => value + 1);
-    setProcessing(false);
-  }
-
-  function onDown() {
-    setProcessing(true);
-    setLocalVote((value) => value - 1);
-    setLocalRating((value) => value - 1);
-    setProcessing(false);
-  }
-
+const Rating: React.FC<RatingProps> = ({
+  rating,
+  vote = RatingType.unset,
+  processing,
+  onUpVote,
+  onDownVote,
+  onVoteReset,
+}) => {
   return (
     <StyledRating>
-      {localVote > 0 && (
+      {vote === RatingType.unset && (
         <>
-          <BlueArrowUpButton disabled={true}/>
-          <BlueRatingValue>
-            {getPresentationRating(localRating)}
-          </BlueRatingValue>
-          <ArrowDownButton disabled={processing} onClick={onDown} />
+          <IconButton onClick={onUpVote} disabled={processing}>
+            <FontAwesomeIcon icon={faArrowUp} />
+          </IconButton>
+          <RatingValue>{getPresentationRating(rating)}</RatingValue>
+          <IconButton onClick={onDownVote} disabled={processing}>
+            <FontAwesomeIcon icon={faArrowDown} />
+          </IconButton>
         </>
       )}
-      {localVote === 0 && (
+      {vote === RatingType.up && (
         <>
-          <ArrowUpButton disabled={processing} onClick={onUp} />
-          <RatingValue>{getPresentationRating(localRating)}</RatingValue>
-          <ArrowDownButton disabled={processing} onClick={onDown} />
+          <IconButton
+            kind={"success"}
+            onClick={onVoteReset}
+            disabled={processing}
+          >
+            <FontAwesomeIcon icon={faArrowUp} />
+          </IconButton>
+          <RatingValue kind={RatingType.up}>
+            {getPresentationRating(rating)}
+          </RatingValue>
+          <IconButton onClick={onDownVote} disabled={processing}>
+            <FontAwesomeIcon icon={faArrowDown} />
+          </IconButton>
         </>
       )}
-      {localVote < 0 && (
+      {vote === RatingType.down && (
         <>
-          <ArrowUpButton disabled={processing} onClick={onUp} />
-          <RedRatingValue>{getPresentationRating(localRating)}</RedRatingValue>
-          <RedArrowDownButton disabled={true}/>
+          <IconButton onClick={onUpVote} disabled={processing}>
+            <FontAwesomeIcon icon={faArrowUp} />
+          </IconButton>
+          <RatingValue kind={RatingType.down}>
+            {getPresentationRating(rating)}
+          </RatingValue>
+          <IconButton
+            kind={"error"}
+            onClick={onVoteReset}
+            disabled={processing}
+          >
+            <FontAwesomeIcon icon={faArrowDown} />
+          </IconButton>
         </>
       )}
     </StyledRating>
@@ -67,18 +87,20 @@ const StyledRating = styled.div`
   margin-right: 40px;
 `;
 
-const RatingValue = styled.div`
-  color: #8f8f8f;
+interface RatingValueProps {
+  kind?: RatingType;
+}
+
+const RatingValue = styled.div<RatingValueProps>`
+  color: ${({ kind = RatingType.unset }) => colors[kind]};
   user-select: none;
   font-weight: bold;
 `;
 
-const RedRatingValue = styled(RatingValue)`
-  color: #ff304f;
-`;
-
-const BlueRatingValue = styled(RatingValue)`
-  color: #3d5af1;
-`;
+const colors = {
+  [RatingType.unset]: "#8f8f8f",
+  [RatingType.up]: "#3d5af1",
+  [RatingType.down]: "#ff304f",
+};
 
 export default Rating;
