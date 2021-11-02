@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useMounted from "./useMounted";
 
 export type UseQueryFn<TData> = () => Promise<TData>;
 
@@ -14,31 +15,27 @@ function useQuery<TData, TError>(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<TData | undefined>(undefined);
   const [error, setError] = useState<TError | undefined>(undefined);
+  const mounted = useMounted();
 
   useEffect(() => {
-    let running = true;
     setIsLoading(true);
 
     (async () => {
       try {
         const response = await query();
-        if (running) {
+        if (mounted.current) {
           setData(response);
         }
       } catch (error) {
-        if (running) {
+        if (mounted.current) {
           setError(error as TError);
         }
       } finally {
-        if (running) {
+        if (mounted.current) {
           setIsLoading(false);
         }
       }
     })();
-
-    return () => {
-      running = false;
-    }
   }, [query]);
 
   return {
