@@ -16,18 +16,29 @@ function useQuery<TData, TError>(
   const [error, setError] = useState<TError | undefined>(undefined);
 
   useEffect(() => {
+    let running = true;
     setIsLoading(true);
 
     (async () => {
       try {
         const response = await query();
-        setData(response);
+        if (running) {
+          setData(response);
+        }
       } catch (error) {
-        setError(error as TError);
+        if (running) {
+          setError(error as TError);
+        }
       } finally {
-        setIsLoading(false);
+        if (running) {
+          setIsLoading(false);
+        }
       }
     })();
+
+    return () => {
+      running = false;
+    }
   }, [query]);
 
   return {
