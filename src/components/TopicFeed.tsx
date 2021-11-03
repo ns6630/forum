@@ -5,11 +5,11 @@ import { topicApi } from "../App";
 import Loader from "./Loader";
 import styled from "styled-components/macro";
 import { compareTopicPages } from "../utils/sort";
-import TopicType, { TopicPage } from "../types/Topic";
+import ITopic, { Topic as TopicClass, TopicPage } from "../types/Topic";
 
 const TopicFeed: React.FC = () => {
   const [page, setPage] = useState<number>(1);
-  const [topics, setTopics] = useState<Map<number, TopicType[]>>(new Map());
+  const [topics, setTopics] = useState<Map<number, ITopic[]>>(new Map());
   const getTopics = useCallback(() => topicApi.getTopics(page), [page]);
   const { isLoading, data, error } = useQuery<TopicPage, Error>(getTopics);
 
@@ -67,7 +67,7 @@ const TopicFeed: React.FC = () => {
       {Array.from(topics.values())
         .flat()
         .map((topic) => (
-          <Topic key={topic.id} topic={topic} />
+          <Topic key={topic.id} topic={new TopicClass(topic)} />
         ))}
       {isLoading && <Loader />}
       <TopicFeedFooter id={"topic_feed__footer"} />

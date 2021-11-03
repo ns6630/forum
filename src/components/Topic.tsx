@@ -1,29 +1,27 @@
 import styled from "styled-components/macro";
-import React, {useState} from "react";
-import Rating, { RatingType } from "./Rating";
+import React from "react";
+import Rating from "./Rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import getFormattedDate from "../utils/date";
 import UserPhoto from "./UserPhoto";
 import Link from "./Link";
-import TopicType from "../types/Topic";
+import { Topic as TopicClass } from "../types/Topic";
+import { observer } from "mobx-react-lite";
 
 export interface TopicProps {
-  topic: TopicType;
+  topic: TopicClass;
 }
 
 const Topic: React.FC<TopicProps> = ({ topic }) => {
-  const [processing, setProcessing] = useState<boolean>(false);
-
   return (
     <StyledTopic>
       <Rating
         rating={topic.rating}
         vote={topic.vote}
-        processing={processing}
-        onUpVote={() => console.log("up")}
-        onDownVote={() => console.log("down")}
-        onVoteReset={() => console.log("unset")}
+        onUpVote={() => topic.voteUp()}
+        onDownVote={() => topic.voteDown()}
+        onVoteReset={() => topic.voteReset()}
       />
       <div>
         <TopicName>
@@ -102,4 +100,4 @@ const StyledTopicComments = styled.div`
   }
 `;
 
-export default React.memo(Topic);
+export default observer(Topic);

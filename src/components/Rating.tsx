@@ -2,19 +2,13 @@ import React from "react";
 import styled from "styled-components/macro";
 import getPresentationRating from "../utils/rating";
 import IconButton from "./IconButton";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-export enum RatingType {
-  unset,
-  up,
-  down,
-}
+import {faArrowDown, faArrowUp} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {VoteType} from "../types/VoteType";
 
 export interface RatingProps {
   rating: number;
-  vote?: RatingType;
-  processing: boolean;
+  vote?: VoteType;
   onUpVote: () => void;
   onDownVote: () => void;
   onVoteReset: () => void;
@@ -22,54 +16,51 @@ export interface RatingProps {
 
 const Rating: React.FC<RatingProps> = ({
   rating,
-  vote = RatingType.unset,
-  processing,
+  vote = VoteType.unset,
   onUpVote,
   onDownVote,
   onVoteReset,
 }) => {
   return (
     <StyledRating>
-      {vote === RatingType.unset && (
+      {vote === VoteType.unset && (
         <>
-          <IconButton onClick={onUpVote} disabled={processing}>
+          <IconButton onClick={onUpVote}>
             <FontAwesomeIcon icon={faArrowUp} />
           </IconButton>
           <RatingValue>{getPresentationRating(rating)}</RatingValue>
-          <IconButton onClick={onDownVote} disabled={processing}>
+          <IconButton onClick={onDownVote}>
             <FontAwesomeIcon icon={faArrowDown} />
           </IconButton>
         </>
       )}
-      {vote === RatingType.up && (
+      {vote === VoteType.up && (
         <>
           <IconButton
             kind={"success"}
             onClick={onVoteReset}
-            disabled={processing}
           >
             <FontAwesomeIcon icon={faArrowUp} />
           </IconButton>
-          <RatingValue kind={RatingType.up}>
+          <RatingValue kind={VoteType.up}>
             {getPresentationRating(rating)}
           </RatingValue>
-          <IconButton onClick={onDownVote} disabled={processing}>
+          <IconButton onClick={onDownVote}>
             <FontAwesomeIcon icon={faArrowDown} />
           </IconButton>
         </>
       )}
-      {vote === RatingType.down && (
+      {vote === VoteType.down && (
         <>
-          <IconButton onClick={onUpVote} disabled={processing}>
+          <IconButton onClick={onUpVote}>
             <FontAwesomeIcon icon={faArrowUp} />
           </IconButton>
-          <RatingValue kind={RatingType.down}>
+          <RatingValue kind={VoteType.down}>
             {getPresentationRating(rating)}
           </RatingValue>
           <IconButton
             kind={"error"}
             onClick={onVoteReset}
-            disabled={processing}
           >
             <FontAwesomeIcon icon={faArrowDown} />
           </IconButton>
@@ -88,19 +79,19 @@ const StyledRating = styled.div`
 `;
 
 interface RatingValueProps {
-  kind?: RatingType;
+  kind?: VoteType;
 }
 
 const RatingValue = styled.div<RatingValueProps>`
-  color: ${({ kind = RatingType.unset }) => colors[kind]};
+  color: ${({ kind = VoteType.unset }) => colors[kind]};
   user-select: none;
   font-weight: bold;
 `;
 
 const colors = {
-  [RatingType.unset]: "#8f8f8f",
-  [RatingType.up]: "#3d5af1",
-  [RatingType.down]: "#ff304f",
+  [VoteType.unset]: "#8f8f8f",
+  [VoteType.up]: "#3d5af1",
+  [VoteType.down]: "#ff304f",
 };
 
 export default Rating;

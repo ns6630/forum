@@ -1,7 +1,7 @@
 import TopicApiBase from "../abstract/TopicApiBase";
-import { RatingType } from "../../components/Rating";
 import { fuzzSleep } from "../../utils/time";
 import { TopicPage } from "../../types/Topic";
+import {VoteType} from "../../types/VoteType";
 
 export default class TopicApi extends TopicApiBase {
   async getTopics(page: number = 1): Promise<TopicPage> {
@@ -22,7 +22,7 @@ export default class TopicApi extends TopicApiBase {
         date: new Date(),
         rating: 100,
         commentsCount: 50,
-        vote: RatingType.unset,
+        vote: VoteType.unset,
       },
       {
         id: id + 1,
@@ -38,7 +38,7 @@ export default class TopicApi extends TopicApiBase {
         date: new Date(),
         rating: -3,
         commentsCount: 9,
-        vote: RatingType.down,
+        vote: VoteType.down,
       },
       {
         id: id + 2,
@@ -54,7 +54,7 @@ export default class TopicApi extends TopicApiBase {
         date: new Date(),
         rating: 3254,
         commentsCount: 27,
-        vote: RatingType.up,
+        vote: VoteType.up,
       },
     ];
     await fuzzSleep(1500);
