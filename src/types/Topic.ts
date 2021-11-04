@@ -1,6 +1,6 @@
 import {User} from "./User";
 import {makeAutoObservable} from "mobx";
-import {VoteType} from "./VoteType";
+import {Vote} from "./Vote";
 
 export default interface ITopic {
   id: number;
@@ -10,7 +10,7 @@ export default interface ITopic {
   date: Date;
   rating: number;
   commentsCount: number;
-  vote?: VoteType;
+  vote?: Vote;
 }
 
 export class Topic implements ITopic {
@@ -21,7 +21,7 @@ export class Topic implements ITopic {
   date: Date;
   rating: number;
   commentsCount: number;
-  vote?: VoteType;
+  vote?: Vote;
 
   constructor(topic: ITopic) {
     makeAutoObservable(this);
@@ -32,21 +32,21 @@ export class Topic implements ITopic {
     this.date = topic.date;
     this.rating = topic.rating;
     this.commentsCount = topic.commentsCount;
-    this.vote = topic.vote ?? VoteType.unset;
+    this.vote = topic.vote ?? Vote.unset;
   }
 
   public voteUp() {
-    this.vote = VoteType.up;
+    this.vote = Vote.up;
     console.log(`User voted for topic №${this.id} up.`);
   }
 
   public voteReset() {
-    this.vote = VoteType.unset;
+    this.vote = Vote.unset;
     console.log(`User voted for topic №${this.id} reset.`);
   }
 
   public voteDown() {
-    this.vote = VoteType.down;
+    this.vote = Vote.down;
     console.log(`User voted for topic №${this.id} down.`);
   }
 }

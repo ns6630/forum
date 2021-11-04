@@ -4,11 +4,11 @@ import getPresentationRating from "../utils/rating";
 import IconButton from "./IconButton";
 import {faArrowDown, faArrowUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {VoteType} from "../types/VoteType";
+import {Vote} from "../types/Vote";
 
 export interface RatingProps {
   rating: number;
-  vote?: VoteType;
+  vote?: Vote;
   onUpVote: () => void;
   onDownVote: () => void;
   onVoteReset: () => void;
@@ -16,14 +16,14 @@ export interface RatingProps {
 
 const Rating: React.FC<RatingProps> = ({
   rating,
-  vote = VoteType.unset,
+  vote = Vote.unset,
   onUpVote,
   onDownVote,
   onVoteReset,
 }) => {
   return (
     <StyledRating>
-      {vote === VoteType.unset && (
+      {vote === Vote.unset && (
         <>
           <IconButton onClick={onUpVote}>
             <FontAwesomeIcon icon={faArrowUp} />
@@ -34,7 +34,7 @@ const Rating: React.FC<RatingProps> = ({
           </IconButton>
         </>
       )}
-      {vote === VoteType.up && (
+      {vote === Vote.up && (
         <>
           <IconButton
             kind={"success"}
@@ -42,7 +42,7 @@ const Rating: React.FC<RatingProps> = ({
           >
             <FontAwesomeIcon icon={faArrowUp} />
           </IconButton>
-          <RatingValue kind={VoteType.up}>
+          <RatingValue kind={Vote.up}>
             {getPresentationRating(rating)}
           </RatingValue>
           <IconButton onClick={onDownVote}>
@@ -50,12 +50,12 @@ const Rating: React.FC<RatingProps> = ({
           </IconButton>
         </>
       )}
-      {vote === VoteType.down && (
+      {vote === Vote.down && (
         <>
           <IconButton onClick={onUpVote}>
             <FontAwesomeIcon icon={faArrowUp} />
           </IconButton>
-          <RatingValue kind={VoteType.down}>
+          <RatingValue kind={Vote.down}>
             {getPresentationRating(rating)}
           </RatingValue>
           <IconButton
@@ -79,19 +79,19 @@ const StyledRating = styled.div`
 `;
 
 interface RatingValueProps {
-  kind?: VoteType;
+  kind?: Vote;
 }
 
 const RatingValue = styled.div<RatingValueProps>`
-  color: ${({ kind = VoteType.unset }) => colors[kind]};
+  color: ${({ kind = Vote.unset }) => colors[kind]};
   user-select: none;
   font-weight: bold;
 `;
 
 const colors = {
-  [VoteType.unset]: "#8f8f8f",
-  [VoteType.up]: "#3d5af1",
-  [VoteType.down]: "#ff304f",
+  [Vote.unset]: "#8f8f8f",
+  [Vote.up]: "#3d5af1",
+  [Vote.down]: "#ff304f",
 };
 
 export default Rating;

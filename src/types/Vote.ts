@@ -1,4 +1,4 @@
-export enum VoteType {
+export enum Vote {
   unset,
   up,
   down,
