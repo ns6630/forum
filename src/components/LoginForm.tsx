@@ -6,25 +6,25 @@ import { maxLengthValidator, minLengthValidator } from "../utils/validators";
 import InputError from "./InputError";
 import Label from "./Label";
 
-type LoginData = {
+export type LoginData = {
   email: string;
   password: string;
 };
 
-const LoginForm: React.FC = () => {
+export interface LoginFormProps {
+  onSubmit: (data: LoginData) => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const authenticate = (data: LoginData) => {
-    console.log(`LogIn! data: ${data}`);
-  };
 
   const form = useForm<LoginData>({
     fields: {
       email: [minLengthValidator(6), maxLengthValidator(20)],
       password: [minLengthValidator(8)],
     },
-    onSubmit: authenticate,
+    onSubmit,
   });
 
   const submitForm = (event: React.FormEvent) => {
