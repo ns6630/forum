@@ -58,7 +58,7 @@ const LoginForm: React.FC = () => {
           onInput={(event) => setPassword(event.target.value)}
         />
       </Label>
-      <button>LogIn</button>
+      <button>Log In</button>
     </Form>
   );
 };
