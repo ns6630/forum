@@ -26,8 +26,11 @@ import FooterLink from "./components/FooterLink";
 import StickyRightColumn from "./components/StickyRightColumn";
 import TopicApi from "./api/fake/TopicApi";
 import Page from "./components/Page";
+import AuthenticationApi from "./api/fake/AuthenticationApi";
+import Login from "./pages/Login";
 
 export const topicApi = new TopicApi();
+export const authenticationApi = new AuthenticationApi();
 
 function App() {
   return (
@@ -53,6 +56,10 @@ function App() {
                 <FontAwesomeIcon icon={faComment} fixedWidth />
                 My answers
               </MenuLink>
+              <MenuLink to={"/login"}>
+                <FontAwesomeIcon icon={faComment} fixedWidth />
+                LogIn
+              </MenuLink>
             </Menu>
             <Content>
               <Switch>
@@ -64,6 +71,9 @@ function App() {
                 </Route>
                 <Route path={"/my-answers"}>
                   <MyAnswers />
+                </Route>
+                <Route path={"/login"}>
+                  <Login/>
                 </Route>
                 <Route path={"/"}>
                   <Home />
