@@ -14,7 +14,7 @@ const Menu: React.FC = ({ children }) => {
 };
 
 const StyledMenu = styled.nav`
-  flex: 0 0 auto;
+  flex: 0 0 200px;
 `;
 
 const MenuList = styled.ul`

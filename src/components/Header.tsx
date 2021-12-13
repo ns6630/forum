@@ -1,6 +1,6 @@
 import styled from "styled-components/macro";
 import React from "react";
-import { User } from "../types/User";
+import {User} from "../types/User";
 import Container from "./Container";
 import Logo from "./Logo";
 
@@ -12,9 +12,12 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <StickyHeader>
       <Container>
-        <StyledHeader>
-          <Logo />
-        </StyledHeader>
+        <LeftHeaderColumn>
+          <Logo/>
+          <StyledName>forum</StyledName>
+        </LeftHeaderColumn>
+        <MiddleHeaderColumn></MiddleHeaderColumn>
+        <RightHeaderColumn></RightHeaderColumn>
       </Container>
     </StickyHeader>
   );
@@ -28,10 +31,30 @@ const StickyHeader = styled.div`
   background: #ffffff;
 `;
 
-const StyledHeader = styled.header`
+
+const HeaderColumn = styled.div`
   display: flex;
   align-items: center;
   height: 80px;
 `;
+
+const LeftHeaderColumn = styled(HeaderColumn)`
+  flex: 0 0 200px;
+`;
+
+const MiddleHeaderColumn = styled(HeaderColumn)`
+  flex: 1;
+`;
+
+const RightHeaderColumn = styled(HeaderColumn)`
+  flex: 0 0 200px;
+  justify-content: flex-end;
+`;
+
+const StyledName = styled.div`
+  color: #3d5af1;
+  margin-left: 1em;
+  font-weight: bold;
+`
 
 export default Header;
