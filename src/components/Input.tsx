@@ -6,15 +6,17 @@ export interface InputProps {
   value?: string;
   kind?: "text" | "password" | "email";
   onInput?: (event: any) => void;
+  disabled?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ placeholder, value, kind, onInput }) => {
+const Input: React.FC<InputProps> = ({ placeholder, value, kind, onInput, disabled }) => {
   return (
     <StyledInput
       placeholder={placeholder}
       type={kind ?? "text"}
       onChange={onInput}
       value={value}
+      disabled={disabled}
     />
   );
 };
