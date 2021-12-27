@@ -1,7 +1,9 @@
 import {User} from "../../types/User";
 
 export default abstract class AuthenticationApiBase {
-  abstract signIn(login: string, password: string): Promise<User>;
+  abstract signInFromCache(): void;
+
+  abstract signIn(email: string, password: string): void;
 
   abstract signOut(): boolean;
 

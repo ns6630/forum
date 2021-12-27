@@ -3,12 +3,9 @@ import React from "react";
 import {User} from "../types/User";
 import Container from "./Container";
 import Logo from "./Logo";
+import ProfileInfo from "./ProfileInfo";
 
-export interface HeaderProps {
-  user: User;
-}
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   return (
     <StickyHeader>
       <Container>
@@ -17,7 +14,9 @@ const Header: React.FC<HeaderProps> = () => {
           <StyledName>forum</StyledName>
         </LeftHeaderColumn>
         <MiddleHeaderColumn></MiddleHeaderColumn>
-        <RightHeaderColumn></RightHeaderColumn>
+        <RightHeaderColumn>
+          <ProfileInfo/>
+        </RightHeaderColumn>
       </Container>
     </StickyHeader>
   );
@@ -27,8 +26,9 @@ const StickyHeader = styled.div`
   position: sticky;
   top: 0;
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  overflow: visible;
   background: #ffffff;
+  z-index: 1;
 `;
 
 

@@ -4,3 +4,8 @@ export interface User {
   photoPath: string;
   rating: number;
 }
+
+export type LoginData = {
+  email: string;
+  password: string;
+};
