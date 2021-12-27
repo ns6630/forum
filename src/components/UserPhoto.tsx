@@ -33,6 +33,7 @@ const StyledUserPhoto = styled.div`
   > svg {
     width: 100%;
     height: 100%;
+    color: #8c8c8c;
   }
 `;
 
